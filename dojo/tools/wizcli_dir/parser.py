@@ -43,9 +43,7 @@ class WizcliDirParser:
 
         data_findings = results.get("dataFindings", None)
         if data_findings:
-            findings.extend(
-                WizcliParsers.parse_data_findings(data_findings, test)
-            )
+            findings.extend(WizcliParsers.parse_data_findings(data_findings, test))
 
         cpes = results.get("cpes", None)
         if cpes:

@@ -1,26 +1,4 @@
-from pathlib import Path
-
-from django.conf import settings
-
 from dojo.models import Finding
-from dojo.tools.locations import LocationData
-
-WIZCLI_MANIFEST_TO_PURL = {
-    "go.mod": "golang", "go.sum": "golang",
-    "package.json": "npm", "package-lock.json": "npm",
-    "yarn.lock": "npm", "pnpm-lock.yaml": "npm",
-    "requirements.txt": "pypi", "Pipfile.lock": "pypi",
-    "poetry.lock": "pypi",
-    "pom.xml": "maven", "build.gradle": "maven", "build.gradle.kts": "maven",
-    "Gemfile": "gem", "Gemfile.lock": "gem",
-    "Cargo.toml": "cargo", "Cargo.lock": "cargo",
-    "composer.json": "composer", "composer.lock": "composer",
-    "packages.config": "nuget",
-    "pubspec.yaml": "pub", "pubspec.lock": "pub",
-    "mix.lock": "hex",
-    "Podfile": "cocoapods", "Podfile.lock": "cocoapods",
-    "Package.swift": "swift",
-}
 
 
 class WizcliParsers:
@@ -29,8 +7,6 @@ class WizcliParsers:
     def parse_libraries(libraries, test):
         findings = []
         if libraries:
-            if isinstance(libraries, dict):
-                libraries = [libraries]
             for library in libraries:
                 lib_name = library.get("name", "N/A")
                 lib_version = library.get("version", "N/A")
@@ -39,19 +15,14 @@ class WizcliParsers:
 
                 for vulnerability in vulnerabilities:
                     vuln_name = vulnerability.get("name", "N/A")
-                    severity_raw = vulnerability.get("severity", "low")
-                    severity = severity_raw.lower().capitalize()
+                    severity = vulnerability.get("severity", "low").lower().capitalize()
                     fixed_version = vulnerability.get("fixedVersion", "N/A")
                     source = vulnerability.get("source", "N/A")
                     description = vulnerability.get("description", "N/A")
                     score = vulnerability.get("score", "N/A")
-                    exploitability_score = vulnerability.get(
-                        "exploitabilityScore", "N/A"
-                    )
+                    exploitability_score = vulnerability.get("exploitabilityScore", "N/A")
                     has_exploit = vulnerability.get("hasExploit", False)
-                    has_cisa_kev_exploit = vulnerability.get(
-                        "hasCisaKevExploit", False
-                    )
+                    has_cisa_kev_exploit = vulnerability.get("hasCisaKevExploit", False)
 
                     finding_description = (
                         f"**Library Name**: {lib_name}\n"
@@ -82,29 +53,12 @@ class WizcliParsers:
                         test=test,
                     )
                     findings.append(finding)
-
-                if settings.V3_FEATURE_LOCATIONS:
-                    lib_name_raw = library.get("name")
-                    lib_version_raw = library.get("version")
-                    lib_path_raw = library.get("path", "")
-                    if lib_name_raw and lib_path_raw:
-                        manifest = Path(lib_path_raw).name
-                        if purl_type := WIZCLI_MANIFEST_TO_PURL.get(manifest):
-                            test.unsaved_metadata.append(
-                                LocationData.dependency(
-                                    purl_type=purl_type,
-                                    name=lib_name_raw,
-                                    version=lib_version_raw,
-                                ),
-                            )
         return findings
 
     @staticmethod
     def parse_secrets(secrets, test):
         findings = []
         if secrets:
-            if isinstance(secrets, dict):
-                secrets = [secrets]
             for secret in secrets:
                 secret_id = secret.get("id", "N/A")
                 desc = secret.get("description", "N/A")
@@ -139,14 +93,11 @@ class WizcliParsers:
     def parse_rule_matches(rule_matches, test):
         findings = []
         if rule_matches:
-            if isinstance(rule_matches, dict):
-                rule_matches = [rule_matches]
             for rule_match in rule_matches:
                 rule = rule_match.get("rule", {})
                 rule_id = rule.get("id", "N/A")
                 rule_name = rule.get("name", "N/A")
-                severity_raw = rule_match.get("severity", "low")
-                severity = severity_raw.lower().capitalize()
+                severity = rule_match.get("severity", "low").lower().capitalize()
 
                 matches = rule_match.get("matches", [])
                 if matches:
@@ -189,8 +140,6 @@ class WizcliParsers:
     def parse_os_packages(os_packages, test):
         findings = []
         if os_packages:
-            if isinstance(os_packages, dict):
-                os_packages = [os_packages]
             for osPackage in os_packages:
                 pkg_name = osPackage.get("name", "N/A")
                 pkg_version = osPackage.get("version", "N/A")
@@ -198,19 +147,14 @@ class WizcliParsers:
 
                 for vulnerability in vulnerabilities:
                     vuln_name = vulnerability.get("name", "N/A")
-                    severity_raw = vulnerability.get("severity", "low")
-                    severity = severity_raw.lower().capitalize()
+                    severity = vulnerability.get("severity", "low").lower().capitalize()
                     fixed_version = vulnerability.get("fixedVersion", "N/A")
                     source = vulnerability.get("source", "N/A")
                     description = vulnerability.get("description", "N/A")
                     score = vulnerability.get("score", "N/A")
-                    exploitability_score = vulnerability.get(
-                        "exploitabilityScore", "N/A"
-                    )
+                    exploitability_score = vulnerability.get("exploitabilityScore", "N/A")
                     has_exploit = vulnerability.get("hasExploit", False)
-                    has_cisa_kev_exploit = vulnerability.get(
-                        "hasCisaKevExploit", False
-                    )
+                    has_cisa_kev_exploit = vulnerability.get("hasCisaKevExploit", False)
 
                     finding_description = (
                         f"**OS Package Name**: {pkg_name}\n"
@@ -245,8 +189,6 @@ class WizcliParsers:
     def parse_end_of_life(end_of_life_findings, test):
         findings = []
         if end_of_life_findings:
-            if isinstance(end_of_life_findings, dict):
-                end_of_life_findings = [end_of_life_findings]
             for eol in end_of_life_findings:
                 name = eol.get("name", "N/A")
                 version = eol.get("version", "N/A")
@@ -296,8 +238,6 @@ class WizcliParsers:
     def parse_data_findings(data_findings, test):
         findings = []
         if data_findings:
-            if isinstance(data_findings, dict):
-                data_findings = [data_findings]
             for data in data_findings:
                 external_id = data.get("externalId", "N/A")
                 data_classifier = data.get("dataClassifier", {})
@@ -337,8 +277,6 @@ class WizcliParsers:
     def parse_cpes(cpes, test):
         findings = []
         if cpes:
-            if isinstance(cpes, dict):
-                cpes = [cpes]
             for cpe in cpes:
                 name = cpe.get("name", "N/A")
                 version = cpe.get("version", "N/A")
