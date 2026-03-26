@@ -330,6 +330,60 @@ class WizcliParsers:
         return findings
 
     @staticmethod
+    def parse_software_supply_chain(supply_chain_findings, test):
+        findings = []
+        if supply_chain_findings:
+            for item in supply_chain_findings:
+                unique_id = item.get("id") or None
+                name = item.get("name", "N/A")
+                severity = item.get("severity", "low").lower().capitalize()
+                license_names = item.get("licenseNames") or []
+                license_category = item.get("licenseCategory", "N/A")
+
+                rule = item.get("rule") or {}
+                rule_id = rule.get("id", "N/A")
+                rule_name = rule.get("name") or "N/A"
+
+                code_library = item.get("codeLibrary") or {}
+                lib_name = code_library.get("name", "N/A")
+                lib_version = code_library.get("version", "N/A")
+                lib_path = code_library.get("path", "N/A")
+
+                licenses_str = ", ".join(
+                    str(ln).replace("`", "'") for ln in license_names
+                ) if license_names else "N/A"
+
+                finding_description = (
+                    f"**Finding**: {name}\n"
+                    f"**Rule ID**: {rule_id}\n"
+                    f"**Rule Name**: {rule_name}\n"
+                    f"**Library Name**: {lib_name}\n"
+                    f"**Library Version**: {lib_version}\n"
+                    f"**Library Path**: {lib_path}\n"
+                    f"**Licenses**: {licenses_str}\n"
+                    f"**License Category**: {license_category}\n"
+                )
+
+                mitigation = (
+                    "Review the license usage with the legal team to ensure compliance with project requirements. "
+                    "If the license is not allowed, consider replacing the library with a permissively licensed alternative."
+                )
+
+                finding = Finding(
+                    title=f"Supply Chain: {lib_name} ({licenses_str}) - {name}",
+                    description=finding_description,
+                    severity=severity,
+                    file_path=lib_path,
+                    static_finding=True,
+                    dynamic_finding=False,
+                    mitigation=mitigation,
+                    unique_id_from_tool=unique_id,
+                    test=test,
+                )
+                findings.append(finding)
+        return findings
+
+    @staticmethod
     def convert_status(wiz_status) -> dict:
         """
         Convert the Wiz Status to a dict of Finding status flags.

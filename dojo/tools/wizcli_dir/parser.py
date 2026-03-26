@@ -49,4 +49,8 @@ class WizcliDirParser:
         if cpes:
             findings.extend(WizcliParsers.parse_cpes(cpes, test))
 
+        supply_chain = results.get("softwareSupplyChain", None)
+        if supply_chain:
+            findings.extend(WizcliParsers.parse_software_supply_chain(supply_chain, test))
+
         return findings
