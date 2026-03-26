@@ -790,7 +790,6 @@
       "add_vulnerability_id_to_jira_label": false,
       "allow_anonymous_survey_repsonse": false,
       "api_expose_error_details": false,
-      "credentials": "",
       "default_group": null,
       "default_group_email_pattern": "",
       "default_group_role": null,
@@ -37021,14 +37020,6 @@
   },
   {
     "fields": {
-      "color": "#AED6F1",
-      "language": "DOS Batch"
-    },
-    "model": "dojo.language_type",
-    "pk": 52
-  },
-  {
-    "fields": {
       "color": "#85C1E9",
       "language": "Drools"
     },
@@ -37314,14 +37305,6 @@
     },
     "model": "dojo.language_type",
     "pk": 88
-  },
-  {
-    "fields": {
-      "color": "#D4EFDF",
-      "language": "InstallShield"
-    },
-    "model": "dojo.language_type",
-    "pk": 89
   },
   {
     "fields": {
@@ -37882,14 +37865,6 @@
     },
     "model": "dojo.language_type",
     "pk": 161
-  },
-  {
-    "fields": {
-      "color": "#000080",
-      "language": "Ruby"
-    },
-    "model": "dojo.language_type",
-    "pk": 162
   },
   {
     "fields": {
