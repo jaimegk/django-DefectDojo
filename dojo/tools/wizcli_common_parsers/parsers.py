@@ -42,6 +42,7 @@ class WizcliParsers:
                         mitigation = f"Upgrade to version {fixed_version}"
                     else:
                         mitigation = None
+                    unique_id = (vulnerability.get("finding") or {}).get("id")
                     finding = Finding(
                         title=f"{lib_name} - {vuln_name}",
                         description=finding_description,
@@ -50,6 +51,7 @@ class WizcliParsers:
                         static_finding=True,
                         dynamic_finding=False,
                         mitigation=mitigation,
+                        unique_id_from_tool=unique_id,
                         test=test,
                     )
                     findings.append(finding)
@@ -75,8 +77,9 @@ class WizcliParsers:
                     f"**Match Content**: {match_content}\n"
                 )
 
+                unique_id = secret.get("id") or None
                 finding = Finding(
-                    title=f"Secret: {desc}",
+                    title=f"Secret - {desc}",
                     description=description,
                     severity=severity,
                     file_path=file_name,
@@ -84,6 +87,7 @@ class WizcliParsers:
                     static_finding=True,
                     dynamic_finding=False,
                     mitigation=None,
+                    unique_id_from_tool=unique_id,
                     test=test,
                 )
                 findings.append(finding)
@@ -173,6 +177,7 @@ class WizcliParsers:
                         mitigation = f"Upgrade to version {fixed_version}"
                     else:
                         mitigation = None
+                    unique_id = (vulnerability.get("finding") or {}).get("id")
                     finding = Finding(
                         title=f"{pkg_name} - {vuln_name}",
                         description=finding_description,
@@ -180,6 +185,7 @@ class WizcliParsers:
                         static_finding=True,
                         dynamic_finding=False,
                         mitigation=mitigation,
+                        unique_id_from_tool=unique_id,
                         test=test,
                     )
                     findings.append(finding)
@@ -221,6 +227,7 @@ class WizcliParsers:
                         mitigation = f"Upgrade to version {fixed_version}"
                     else:
                         mitigation = None
+                    unique_id = (vulnerability.get("finding") or {}).get("id")
                     finding = Finding(
                         title=f"{name} - {vuln_name}",
                         description=finding_description,
@@ -229,6 +236,7 @@ class WizcliParsers:
                         static_finding=True,
                         dynamic_finding=False,
                         mitigation=mitigation,
+                        unique_id_from_tool=unique_id,
                         test=test,
                     )
                     findings.append(finding)
@@ -307,6 +315,7 @@ class WizcliParsers:
                         mitigation = f"Upgrade to version {fixed_version}"
                     else:
                         mitigation = None
+                    unique_id = (vulnerability.get("finding") or {}).get("id")
                     finding = Finding(
                         title=f"{name} - {vuln_name}",
                         description=finding_description,
@@ -314,6 +323,7 @@ class WizcliParsers:
                         static_finding=True,
                         dynamic_finding=False,
                         mitigation=mitigation,
+                        unique_id_from_tool=unique_id,
                         test=test,
                     )
                     findings.append(finding)
