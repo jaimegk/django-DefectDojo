@@ -79,7 +79,7 @@ class WizcliParsers:
 
                 unique_id = secret.get("id") or None
                 finding = Finding(
-                    title=f"Secret - {desc}",
+                    title=f"Secret: {desc}",
                     description=description,
                     severity=severity,
                     file_path=file_name,
@@ -271,7 +271,7 @@ class WizcliParsers:
                         )
 
                 finding = Finding(
-                    title=f"Data Finding - {classifier_name}",
+                    title=f"Data Finding: {classifier_name}",
                     description=finding_description,
                     severity=severity,
                     static_finding=True,
