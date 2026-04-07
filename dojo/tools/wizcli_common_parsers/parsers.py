@@ -94,7 +94,7 @@ class WizcliParsers:
             for secret in secrets:
                 secret_id = secret.get("id", "N/A")
                 desc = secret.get("description", "N/A")
-                severity = "High"
+                severity = secret.get("severity", "high").lower().capitalize()
                 file_name = secret.get("path", "N/A")
                 line_number = secret.get("lineNumber", "N/A")
                 match_content = secret.get("type", "N/A")
